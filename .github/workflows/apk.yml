@@ -9,15 +9,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Revisar archivos del proyecto
+        run: |
+          echo "=== Archivos en el repositorio ==="
+          find . -type f -not -path "./.git/*" | sort
+          echo
+          falta=0
+          for f in settings.gradle.kts build.gradle.kts gradle.properties \
+                   app/build.gradle.kts app/src/main/AndroidManifest.xml \
+                   app/src/main/java/ar/runas/nordicas/MainActivity.kt \
+                   app/src/main/res/drawable/ic_rune.xml \
+                   app/src/main/res/drawable/ic_stat.xml \
+                   app/src/main/assets/setup.html; do
+            if [ ! -f "$f" ]; then echo "FALTA o mal ubicado: $f"; falta=1; fi
+          done
+          if grep -rl '^```' --include=*.kts --include=*.kt --include=*.xml --include=*.html --include=*.properties . ; then
+            echo "Esos archivos tienen las comillas ``` del chat pegadas: borralas."; falta=1
+          fi
+          exit $falta
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.7'
+
       - name: Compilar
         run: gradle assembleDebug --no-daemon --stacktrace
+
       - uses: actions/upload-artifact@v4
         with:
           name: RunasNordicas-apk
