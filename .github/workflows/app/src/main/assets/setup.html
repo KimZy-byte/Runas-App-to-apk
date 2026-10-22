@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -10%,#1f170d,#0b0907 65%);color:#e2d4b2;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
+.c{width:100%;max-width:420px;text-align:center}
+.e{font-size:68px;color:#c8a45a;text-shadow:0 0 28px #c8a45a77;animation:p 3s ease-in-out infinite}
+@keyframes p{50%{text-shadow:0 0 44px #c8a45acc}}
+h1{font-size:22px;letter-spacing:5px;margin:6px 0;color:#f0e0b0;font-weight:400}
+.r{color:#c8a45a66;letter-spacing:5px;font-size:13px;margin-bottom:22px}
+label{display:block;text-align:left;font-size:11px;letter-spacing:2px;color:#a8966f;margin:14px 0 6px}
+input{width:100%;box-sizing:border-box;padding:13px;border-radius:6px;border:1px solid #c8a45a55;background:#00000066;color:#f0e0b0;font-size:15px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+button{padding:18px 8px;border-radius:8px;border:1px solid #c8a45a;background:#c8a45a1f;color:#f0e0b0;font-size:14px;letter-spacing:1px;font-family:Georgia,serif}
+button:active{background:#c8a45a44}
+button b{display:block;font-size:28px;font-weight:400;margin-bottom:4px;color:#c8a45a}
+.err{background:#e0705018;border:1px solid #e0705066;color:#e9a08a;padding:10px;border-radius:6px;font-size:13px;margin-bottom:14px;display:none;line-height:1.5}
+.h{font-size:12px;color:#a8966f99;margin-top:20px;line-height:1.7}
+</style></head><body><div class="c">
+<div class="e">ᛟ</div><h1>RUNAS NÓRDICAS</h1><div class="r">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ</div>
+<div class="err" id="err"></div>
+<label>DIRECCIÓN DEL SERVIDOR (ngrok)</label>
+<input id="url" placeholder="https://tu-dominio.ngrok-free.app" autocapitalize="off" autocorrect="off" spellcheck="false">
+<div class="roles">
+  <button onclick="go('jugador')"><b>ᛗ</b>Soy jugador/a</button>
+  <button onclick="go('md')"><b>ᛟ</b>Soy el Máster</button>
+</div>
+<p class="h">Pegá la dirección que te da ngrok en la compu del MD.<br>La app la recuerda para la próxima vez.</p>
+</div>
+<script>
+var q = new URLSearchParams(location.search).get('e');
+if (q) { var e = document.getElementById('err'); e.textContent = q; e.style.display = 'block'; }
+try { var c = JSON.parse(AndroidBridge.getConfig()); document.getElementById('url').value = c.url || ''; } catch (x) {}
+function go(role) {
+  var u = document.getElementById('url').value.trim();
+  if (!u) { alert('Pegá la dirección del servidor'); return; }
+  if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+  u = u.replace(/\/+$/, '').replace(/\/(md|jugador\.html)$/i, '');
+  AndroidBridge.saveConfig(u, role);
+}
+</script></body></html>
