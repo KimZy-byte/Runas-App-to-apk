@@ -25,7 +25,7 @@ jobs:
             if [ ! -f "$f" ]; then echo "FALTA o mal ubicado: $f"; falta=1; fi
           done
           if grep -rl '^```' --include=*.kts --include=*.kt --include=*.xml --include=*.html --include=*.properties . ; then
-            echo "Esos archivos tienen las comillas ``` del chat pegadas: borralas."; falta=1
+            echo "Esos archivos tienen las comillas triples del chat pegadas: borralas."; falta=1
           fi
           exit $falta
 
